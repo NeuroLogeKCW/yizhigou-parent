@@ -16,6 +16,7 @@
       <module>yizhigou-manager-web</module>
     <module>yizhigou-service-interface</module>
     <module>yizhigou-shop-web</module>
+      <module>yizhigou-portal-web</module>
   </modules>
   <!-- 集中定义依赖版本号 -->
   <properties>

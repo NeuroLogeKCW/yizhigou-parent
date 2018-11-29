@@ -10,6 +10,7 @@
         <module name="yizhigou-dao" />
         <module name="yizhigou-manager-web" />
         <module name="yizhigou-pojo" />
+        <module name="yizhigou-portal-web" />
         <module name="yizhigou-service-interface" />
         <module name="yizhigou-service-provider" />
         <module name="yizhigou-shop-web" />

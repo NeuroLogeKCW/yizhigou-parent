@@ -12,6 +12,7 @@
   </component>
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/yizhigou-manager-web" />
+    <file type="web" url="file://$PROJECT_DIR$/yizhigou-portal-web" />
     <file type="web" url="file://$PROJECT_DIR$/yizhigou-service-provider" />
     <file type="web" url="file://$PROJECT_DIR$/yizhigou-shop-web" />
   </component>

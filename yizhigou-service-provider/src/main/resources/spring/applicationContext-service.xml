@@ -20,6 +20,6 @@
     <dubbo:provider timeout="30000" threadpool="fixed" threads="500" accepts="1000" />
 
     <!--采用此种方式可以直接扫描包下的 dubbo的service注解;多个包用，分割-->
-    <dubbo:annotation package="com.yizhigou.sellergoods.service.impl" />
+    <dubbo:annotation package="com.yizhigou.sellergoods.service.impl,com.yizhigou.content.service.impl" />
 
 </beans>
