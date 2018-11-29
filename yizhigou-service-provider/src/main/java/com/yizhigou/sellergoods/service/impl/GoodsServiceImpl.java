@@ -2,18 +2,22 @@ package com.yizhigou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.yizhigou.Extra.GoodsExt;
 import com.yizhigou.entity.PageResult;
 import com.yizhigou.mapper.*;
-import com.yizhigou.pojo.TbItem;
+import com.yizhigou.pojo.*;
 import com.yizhigou.sellergoods.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
@@ -39,9 +43,55 @@ public class GoodsServiceImpl implements GoodsService {
         return null;
     }
 
+
     @Override
-    public PageResult findPage(int pageNum, int pageSize) {
-        return null;
+    public PageResult findPage(TbGoods goods, int pageNum, int pageSize) {
+
+        PageHelper.startPage(pageNum, pageSize);
+
+        TbGoodsExample example=new TbGoodsExample();
+        TbGoodsExample.Criteria criteria = example.createCriteria();
+        //商家只能查询自己的商品
+        if(goods!=null){
+            if(goods.getSellerId()!=null && goods.getSellerId().length()>0){
+                criteria.andSellerIdEqualTo(goods.getSellerId());
+            }
+            if(goods.getGoodsName()!=null && goods.getGoodsName().length()>0){
+                criteria.andGoodsNameLike("%"+goods.getGoodsName()+"%");
+            }
+            if(goods.getAuditStatus()!=null && goods.getAuditStatus().length()>0){
+                criteria.andAuditStatusLike("%"+goods.getAuditStatus()+"%");
+            }
+            if(goods.getIsMarketable()!=null && goods.getIsMarketable().length()>0){
+                criteria.andIsMarketableLike("%"+goods.getIsMarketable()+"%");
+            }
+            if(goods.getCaption()!=null && goods.getCaption().length()>0){
+                criteria.andCaptionLike("%"+goods.getCaption()+"%");
+            }
+            if(goods.getSmallPic()!=null && goods.getSmallPic().length()>0){
+                criteria.andSmallPicLike("%"+goods.getSmallPic()+"%");
+            }
+            if(goods.getIsEnableSpec()!=null && goods.getIsEnableSpec().length()>0){
+                criteria.andIsEnableSpecLike("%"+goods.getIsEnableSpec()+"%");
+            }
+            if(goods.getIsDelete()!=null && goods.getIsDelete().length()>0){
+                criteria.andIsDeleteLike("%"+goods.getIsDelete()+"%");
+            }
+
+        }
+
+        Page<TbGoods> page= (Page<TbGoods>)tbGoodsMapper.selectByExample(example);
+        return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+
+        for(Long id:ids){
+            TbGoods goods = tbGoodsMapper.selectByPrimaryKey(id);
+            goods.setAuditStatus(status);
+            tbGoodsMapper.updateByPrimaryKey(goods);
+        }
     }
 
     @Override
@@ -54,6 +104,10 @@ public class GoodsServiceImpl implements GoodsService {
 
 
         //判断 是否开启了SKU 如果没有则只有一条默认信息
+        addAllItemList(goods);
+    }
+
+    private void addAllItemList(GoodsExt goods) {
         List<TbItem> itemList = goods.getItemList();
         if ("1".equals(goods.getTbGoods().getIsEnableSpec())) {//开启了sku
 
@@ -125,21 +179,39 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void update(GoodsExt goods) {
 
+        tbGoodsMapper.updateByPrimaryKey(goods.getTbGoods());
+        tbGoodsDescMapper.updateByPrimaryKey(goods.getTbGoodsDesc());
+
+        //删除item中原来的数据
+        List<TbItem> itemList = goods.getItemList();
+        for (TbItem tbItem : itemList) {
+            tbItemMapper.deleteByPrimaryKey(tbItem.getId());
+        }
+
+        //重新添加新的数据
+        addAllItemList(goods);
     }
 
     @Override
     public GoodsExt findOne(Long id) {
-        return null;
+
+        TbGoods tbGoods = tbGoodsMapper.selectByPrimaryKey(id);
+        TbGoodsDesc tbGoodsDesc = tbGoodsDescMapper.selectByPrimaryKey(id);
+
+        TbItemExample tbItemExample = new TbItemExample();
+        tbItemExample.createCriteria().andGoodsIdEqualTo(id);
+        List<TbItem> tbItems = tbItemMapper.selectByExample(tbItemExample);
+
+        GoodsExt goodsExt = new GoodsExt();
+        goodsExt.setTbGoods(tbGoods);
+        goodsExt.setTbGoodsDesc(tbGoodsDesc);
+        goodsExt.setItemList(tbItems);
+        return goodsExt;
     }
 
 
     @Override
     public void delete(Long[] ids) {
 
-    }
-
-    @Override
-    public PageResult findPage(GoodsExt goods, int pageNum, int pageSize) {
-        return null;
     }
 }

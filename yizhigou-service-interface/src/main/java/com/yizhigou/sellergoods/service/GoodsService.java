@@ -2,6 +2,7 @@ package com.yizhigou.sellergoods.service;
 
 import com.yizhigou.Extra.GoodsExt;
 import com.yizhigou.entity.PageResult;
+import com.yizhigou.pojo.TbGoods;
 
 import java.util.List;
 /**
@@ -16,14 +17,6 @@ public interface GoodsService {
 	 * @return
 	 */
 	public List<GoodsExt> findAll();
-	
-	
-	/**
-	 * 返回分页列表
-	 * @return
-	 */
-	public PageResult findPage(int pageNum, int pageSize);
-	
 	
 	/**
 	 * 增加
@@ -55,8 +48,16 @@ public interface GoodsService {
 	 * 分页
 	 * @param pageNum 当前页 码
 	 * @param pageSize 每页记录数
+	 * @param goods 条件
 	 * @return
 	 */
-	public PageResult findPage(GoodsExt goods, int pageNum, int pageSize);
+	public PageResult findPage(TbGoods goods, int pageNum, int pageSize);
+
+	/**
+	 * 批量修改状态
+	 * @param ids
+	 * @param status
+	 */
+	public void updateStatus(Long []ids,String status);
 	
 }

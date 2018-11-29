@@ -33,4 +33,9 @@ app.service('itemCatService', function ($http) {
     this.getItemCatByParentId = function (parentId) {
         return $http.post('../itemCat/getItemCatByParentId.do?parentId=' + parentId);
     }
+
+    //通过当前id查询
+    this.getItemCatById = function (id) {
+        return $http.post('../itemCat/getItemCatById.do?id=' + id);
+    }
 });

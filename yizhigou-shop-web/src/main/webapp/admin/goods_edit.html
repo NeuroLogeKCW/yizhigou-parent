@@ -39,7 +39,7 @@
     
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="yizhigou" ng-controller="goodsController" ng-init="getItemCatList()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="yizhigou" ng-controller="goodsController" ng-init="getItemCatList();findOne()">
 
             <!-- 正文区域 -->
             <section class="content">
@@ -210,7 +210,7 @@
 					                        <div class="col-md-10 data">
 					                               
 					                            <span ng-repeat="option in pojo.options">
-					                            	<input  type="checkbox" ng-click="updateSpecAttribute($event,pojo.text,option.optionName);createItemList()">{{option.optionName}}
+					                            	<input  type="checkbox" ng-click="updateSpecAttribute($event,pojo.text,option.optionName);createItemList();" ng-checked="checkAttributeValue(pojo.text,option.optionName)">{{option.optionName}}
 					                            </span>  	
 
 					                            	
@@ -276,7 +276,7 @@
 					  <!---->
 					  <!---->
 					  <!--全部保存-->
-				      <button class="btn btn-primary" ng-click="add()"><i class="fa fa-save"></i>111113213保存</button>
+				      <button class="btn btn-primary" ng-click="save()"><i class="fa fa-save"></i>111113213保存</button>
 				      <button class="btn btn-default" ng-click="goListPage()">返回列表</button>
 				  </div>
 			
