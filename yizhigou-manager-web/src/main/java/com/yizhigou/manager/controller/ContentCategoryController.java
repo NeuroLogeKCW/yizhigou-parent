@@ -20,7 +20,7 @@ import java.util.List;
 public class ContentCategoryController {
 
 	@Reference
-	private ContentCategoryService contentCategoryService;
+	private ContentCategoryService  contentCategoryService;
 	
 	/**
 	 * 返回全部列表
